@@ -53,8 +53,26 @@ const Home = ({ user, userId, setLoginUser }) => {
         </div>
       </div>
 
-      <div className="body">
-        <Posts posts={posts} />
+      <div className="main">
+        {extension.includes("userposts") ? (
+          <div className="topbar">
+            <div className="form">
+              <textarea
+                type="text"
+                placeholder="Enter text content here..."
+              ></textarea>
+              <input
+                type="text"
+                placeholder="Paste the image url here..."
+              ></input>
+              <button>Create</button>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="body">
+          <Posts posts={posts} />
+        </div>
       </div>
     </div>
   );
