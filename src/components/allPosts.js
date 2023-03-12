@@ -1,8 +1,23 @@
 import React from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+const BASE_URI = "http://localhost:3000";
 
-const Posts = ({ posts }) => {
+const AllPosts = ({ userId }) => {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .post(`${BASE_URI}/posts`, { userId })
+      .then((res) => {
+        setPosts(res.data.posts.reverse());
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   return (
-    <div>
+    <div className="body">
       {posts.map((post) => (
         <div className="post" key={post._id}>
           <div className="user">
@@ -42,4 +57,4 @@ const Posts = ({ posts }) => {
   );
 };
 
-export default Posts;
+export default AllPosts;
