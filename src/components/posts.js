@@ -16,12 +16,6 @@ const Posts = ({ posts }) => {
             <p>{post.content}</p>
           </div>
 
-          {/* <div className="media">
-            <div className="media-container">
-              <img src={post.media}></img>
-            </div>
-          </div> */}
-
           {post.media ? (
             <div className="media">
               <div className="media-container">

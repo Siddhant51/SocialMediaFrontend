@@ -9,6 +9,39 @@ const BASE_URI = "http://localhost:3000";
 const Home = ({ user, userId, setLoginUser }) => {
   const [posts, setPosts] = useState([]);
   const [extension, setExtension] = useState("posts");
+  const [content, setContent] = useState("");
+  const [media, setMedia] = useState("");
+
+  const handelImage = (e) => {
+    const file = e.target.files[0];
+    setFileToBase(file);
+  };
+
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setMedia(reader.result);
+    };
+  };
+
+  const Create = () => {
+    console.log(userId);
+
+    try {
+      if (userId && (content || media)) {
+        axios.post("/create", { content, media, userId }).then(() => {
+          console.log("Post successful");
+          setContent("");
+          setMedia("");
+        });
+      } else {
+        alert("Please atleast fill one field");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -19,7 +52,7 @@ const Home = ({ user, userId, setLoginUser }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [extension]);
+  }, [extension, Create]);
 
   return (
     <div className="display">
@@ -59,13 +92,14 @@ const Home = ({ user, userId, setLoginUser }) => {
             <div className="form">
               <textarea
                 type="text"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
                 placeholder="Enter text content here..."
               ></textarea>
-              <input
-                type="text"
-                placeholder="Paste the image url here..."
-              ></input>
-              <button>Create</button>
+              <input type="file" onChange={handelImage}></input>
+              <div className="btn" onClick={Create}>
+                Create
+              </div>
             </div>
           </div>
         ) : null}

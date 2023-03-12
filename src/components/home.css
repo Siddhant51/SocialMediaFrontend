@@ -64,6 +64,7 @@
     height: calc(18vh - 10px);
     margin-bottom: 10px;
     padding: 10px;
+    border-radius: 10px;
 }
 .form > textarea{
     outline: none;
@@ -78,12 +79,11 @@
     font-size: 16px;
     margin-bottom: 5px;
 }
-.form > button{
-    border: none;
-    outline: none;
+.form > .btn{
+    text-align: center;
     font-size: 16px;
     padding: 10px;
-    background-color: aquamarine;
+    background-color: rgb(0, 193, 129);
 }
 
 .body{
