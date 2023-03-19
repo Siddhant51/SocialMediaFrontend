@@ -3,36 +3,47 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 const BASE_URI = "http://localhost:3000";
 
+const NAME_OF_UPLOAD_PRESET = "pafh9buy";
+const YOUR_CLOUDINARY_ID = "dsmdga8vs";
+
 const UserPosts = ({ userId }) => {
   const [posts, setPosts] = useState([]);
   const [content, setContent] = useState("");
-  const [media, setMedia] = useState("");
+  const [file, setFile] = useState();
 
-  const handelImage = (e) => {
-    const file = e.target.files[0];
-    setFileToBase(file);
+  const handelImage = (event) => {
+    setFile(event.target.files[0]);
   };
 
-  const setFileToBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setMedia(reader.result);
-    };
-  };
-
-  const Create = () => {
-    console.log(userId);
-
+  const Create = async (e) => {
+    e.preventDefault();
     try {
-      if (userId && (content || media)) {
-        axios.post("/create", { content, media, userId }).then(() => {
-          console.log("Post successful");
-          setContent("");
-          setMedia("");
-        });
+      if (userId && content && file) {
+        const data = new FormData();
+        data.append("content", content);
+        data.append("file", file);
+        data.append("upload_preset", NAME_OF_UPLOAD_PRESET);
+        data.append("folder", "Trial");
+
+        const res = await axios.post(
+          `https://api.cloudinary.com/v1_1/${YOUR_CLOUDINARY_ID}/image/upload`,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const img = res.data;
+        const media = img.secure_url;
+
+        await axios.post("/create", { content, media, userId });
+        console.log("Post successful");
+        setContent("");
+        setFile();
       } else {
-        alert("Please atleast fill one field");
+        alert("Please fill all fields");
       }
     } catch (error) {
       console.log(error);
@@ -49,6 +60,7 @@ const UserPosts = ({ userId }) => {
         console.log(error);
       });
   }, [Create]);
+
   return (
     <>
       <div className="topbar">
@@ -59,10 +71,10 @@ const UserPosts = ({ userId }) => {
             onChange={(e) => setContent(e.target.value)}
             placeholder="Enter text content here..."
           ></textarea>
-          <input type="file" onChange={handelImage}></input>
-          <div className="btn" onClick={Create}>
+          <input type="file" name="file" onChange={handelImage}></input>
+          <button className="btn" onClick={Create}>
             Create
-          </div>
+          </button>
         </div>
       </div>
 
@@ -76,10 +88,6 @@ const UserPosts = ({ userId }) => {
               <div className="username">{post.user.name}</div>
             </div>
 
-            <div className="content">
-              <p>{post.content}</p>
-            </div>
-
             {post.media ? (
               <div className="media">
                 <div className="media-container">
@@ -87,6 +95,10 @@ const UserPosts = ({ userId }) => {
                 </div>
               </div>
             ) : null}
+
+            <div className="content">
+              <p>{post.content}</p>
+            </div>
 
             <div className="time">
               <p>

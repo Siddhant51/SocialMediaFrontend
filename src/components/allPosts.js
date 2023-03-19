@@ -27,10 +27,6 @@ const AllPosts = ({ userId }) => {
             <div className="username">{post.user.name}</div>
           </div>
 
-          <div className="content">
-            <p>{post.content}</p>
-          </div>
-
           {post.media ? (
             <div className="media">
               <div className="media-container">
@@ -38,6 +34,10 @@ const AllPosts = ({ userId }) => {
               </div>
             </div>
           ) : null}
+
+          <div className="content">
+            <p>{post.content}</p>
+          </div>
 
           <div className="time">
             <p>
