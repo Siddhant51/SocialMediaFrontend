@@ -39,7 +39,7 @@ const UserPosts = ({ userId }) => {
         const img = res.data;
         const media = img.secure_url;
 
-        await axios.post("/create", { content, media, userId });
+        await axios.post(`${BASE_URI}/create`, { content, media, userId });
         console.log("Post successful");
         setContent("");
         setFile();

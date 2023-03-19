@@ -4,6 +4,7 @@ import "./home.css";
 import AllPosts from "./allPosts";
 import UserPosts from "./userPosts";
 import Sidebar from "./sidebar";
+import Profile from "./profile";
 
 const Home = ({ user, userId, setLoginUser }) => {
   const [switcher, setSwitcher] = useState("posts");
@@ -20,7 +21,9 @@ const Home = ({ user, userId, setLoginUser }) => {
       </div>
 
       <div className="main">
-        {switcher === "userposts" ? (
+        {switcher === "profile" ? (
+          <Profile user={user} userId={userId} setLoginUser={setLoginUser} />
+        ) : switcher === "userposts" ? (
           <UserPosts userId={userId} />
         ) : (
           <AllPosts userId={userId} />
