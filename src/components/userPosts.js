@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "./post.css";
 const BASE_URI = "http://localhost:3000";
 
 const NAME_OF_UPLOAD_PRESET = "pafh9buy";
